@@ -1,0 +1,66 @@
+/* css/style.css */
+:root {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --primary: #1db954; /* Kolor a'la Spotify */
+    --primary-hover: #1ed760;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    padding-bottom: 100px; /* Miejsce na odtwarzacz */
+}
+
+.app-header { text-align: center; padding: 2rem 1rem; }
+.app-header p { color: var(--text-muted); margin-top: 0.5rem; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
+
+.filters { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.filters input, .filters select {
+    flex: 1; min-width: 200px;
+    padding: 0.8rem; border-radius: 8px;
+    border: 1px solid #333; background: var(--card-bg);
+    color: var(--text-main); font-size: 1rem;
+}
+
+.song-list { display: grid; gap: 1rem; }
+.song-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background 0.2s;
+}
+.song-card:hover { background: #282828; }
+.song-details h3 { margin-bottom: 0.3rem; font-size: 1.1rem; }
+.song-details p { color: var(--text-muted); font-size: 0.9rem; }
+.song-tags { margin-top: 0.5rem; font-size: 0.8rem; color: var(--primary); }
+
+.play-track-btn {
+    background: var(--primary); color: #000; border: none;
+    width: 40px; height: 40px; border-radius: 50%;
+    font-size: 1.2rem; cursor: pointer; transition: transform 0.1s;
+}
+.play-track-btn:hover { transform: scale(1.05); background: var(--primary-hover); }
+
+/* Odtwarzacz przyklejony do dołu */
+.player-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #181818; border-top: 1px solid #282828;
+    padding: 1rem; display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+}
+.player-info { display: flex; flex-direction: column; width: 30%; }
+.player-info span { color: var(--text-muted); font-size: 0.8rem; }
+.player-controls { display: flex; align-items: center; gap: 1rem; flex: 1; max-width: 500px; }
+.play-btn {
+    background: none; border: none; color: var(--text-main);
+    font-size: 2rem; cursor: pointer; width: 50px; text-align: center;
+}
+.play-btn:disabled { color: #555; cursor: not-allowed; }
+#progressBar { flex: 1; cursor: pointer; accent-color: var(--primary); }

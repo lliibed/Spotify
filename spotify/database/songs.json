@@ -1,0 +1,13 @@
+{
+  "songs": [
+    {
+      "id": "1",
+      "title": "Przykładowy Utwór CC0",
+      "author": "AudioDev",
+      "genre": ["lo-fi"],
+      "tags": ["chill", "coding"],
+      "license": "CC0",
+      "file_url": "https://raw.githubusercontent.com/TWOJ_GITHUB/repo/main/audio/test.mp3"
+    }
+  ]
+}

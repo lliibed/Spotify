@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Audio Library</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>Open Audio Library</h1>
+        <p>Darmowa muzyka CC0 / CC-BY do Twoich projektów</p>
+    </header>
+
+    <main class="container">
+        <section class="filters">
+            <input type="text" id="searchInput" placeholder="Szukaj tytułu, autora, tagu..." aria-label="Szukaj utworu">
+            <select id="genreSelect" aria-label="Wybierz gatunek">
+                <option value="">Wszystkie gatunki</option>
+                <option value="lo-fi">Lo-Fi</option>
+                <option value="electronic">Elektroniczna</option>
+                <option value="ambient">Ambient</option>
+            </select>
+        </section>
+
+        <section id="songList" class="song-list">
+            <p class="loading">Ładowanie utworów...</p>
+        </section>
+    </main>
+
+    <footer class="player-bar" id="playerBar">
+        <div class="player-info">
+            <strong id="trackTitle">Wybierz utwór</strong>
+            <span id="trackAuthor">--</span>
+        </div>
+        <div class="player-controls">
+            <button id="playPauseBtn" class="play-btn" aria-label="Graj / Pauzuj" disabled>▶</button>
+            <input type="range" id="progressBar" value="0" min="0" max="100" aria-label="Pasek postępu">
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
