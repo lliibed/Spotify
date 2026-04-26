@@ -1,11 +1,11 @@
 /* css/style.css */
 :root {
-    --bg-color: #121212;
-    --card-bg: #1e1e1e;
+    --bg-color: #000000;
+    --card-bg: #515151;
     --text-main: #ffffff;
     --text-muted: #a0a0a0;
-    --primary: #1db954; /* Kolor a'la Spotify */
-    --primary-hover: #1ed760;
+    --primary: #079500; 
+    --primary-hover: #04d400;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,6 +48,7 @@ body {
 }
 .play-track-btn:hover { transform: scale(1.05); background: var(--primary-hover); }
 
+
 /* Odtwarzacz przyklejony do dołu */
 .player-bar {
     position: fixed; bottom: 0; left: 0; width: 100%;
@@ -64,3 +65,70 @@ body {
 }
 .play-btn:disabled { color: #555; cursor: not-allowed; }
 #progressBar { flex: 1; cursor: pointer; accent-color: var(--primary); }
+
+/* Kontrola głośności */
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1.5rem;
+}
+
+.mute-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-color, #fff);
+    transition: transform 0.2s ease;
+}
+
+.mute-btn:hover {
+    transform: scale(1.1);
+}
+
+#volumeBar {
+    width: 80px;
+    cursor: pointer;
+    accent-color: #01ff27; 
+}
+
+/* --- OKŁADKI ALBUMÓW --- */
+
+/* Wygląd okładki w dolnym odtwarzaczu */
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.player-cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.player-text {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Wygląd okładki na głównej liście utworów (karty) */
+.song-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.song-card img {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.song-details {
+    flex-grow: 1; 
+}
