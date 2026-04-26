@@ -1,21 +1,11 @@
-document.getElementById('load-btn').addEventListener('click', () => {
-    // Odpytujemy nasz plik PHP
-    fetch('api.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log("Pobrane dane z PHP:", data);
-            document.getElementById('results').innerText = "Znaleziono: " + data.songs[0].title;
-        })
-        .catch(error => console.error("Błąd połączenia:", error));
-});
 // js/main.js
 import { AudioPlayer } from './player.js';
 
-// Inicjalizujemy odtwarzacz
+
 AudioPlayer.init();
 
-// Pamiętaj, że testujemy na serwerze z portem 8000
-const API_URL = 'http://localhost:8000/api.php'; 
+
+const API_URL = 'api.php'; 
 
 // Elementy UI
 const searchInput = document.getElementById('searchInput');
@@ -24,12 +14,12 @@ const songListContainer = document.getElementById('songList');
 
 // Główna funkcja pobierająca dane z PHP
 async function fetchSongs() {
-    // Zbieramy wartości z filtrów
+   
     const searchQuery = searchInput.value;
     const genre = genreSelect.value;
     
-    // Budujemy URL (np. http://localhost:8000/api.php?search=lo-fi&genre=)
-    const url = new URL(API_URL);
+   
+    const url = new URL(API_URL, window.location.href);
     if (searchQuery) url.searchParams.append('search', searchQuery);
     if (genre) url.searchParams.append('genre', genre);
 
@@ -44,13 +34,13 @@ async function fetchSongs() {
         }
     } catch (error) {
         console.error("Błąd połączenia:", error);
-        songListContainer.innerHTML = '<p>Brak połączenia z serwerem. Upewnij się, że PHP działa (php -S localhost:8000).</p>';
+        songListContainer.innerHTML = '<p>Brak połączenia z serwerem. Upewnij się, że serwer PHP działa.</p>';
     }
 }
 
-// Funkcja rysująca listę utworów (Karty HTML)
+
 function renderSongs(songs) {
-    songListContainer.innerHTML = ''; // Czyścimy listę
+    songListContainer.innerHTML = ''; 
 
     if (songs.length === 0) {
         songListContainer.innerHTML = '<p class="loading">Nie znaleziono utworów dla tego filtra.</p>';
@@ -58,23 +48,23 @@ function renderSongs(songs) {
     }
 
     songs.forEach(song => {
-        // Tworzymy kartę utworu
+       
         const card = document.createElement('article');
         card.className = 'song-card';
-        
-        // Zabezpieczamy tagi przed błędami (jeśli ich nie ma)
+     
         const tags = song.tags ? song.tags.join(', ') : '';
 
-        card.innerHTML = `
+      card.innerHTML = `
+            <img src="${song.cover_url || 'https://placehold.co/60x60/222/666?text=🎵'}" alt="Okładka" loading="lazy">
             <div class="song-details">
                 <h3>${song.title}</h3>
-                <p>👤 ${song.author} | 📜 Licencja: ${song.license || 'CC0'}</p>
+                <p>${song.author} | Licencja: ${song.license || 'CC0'}</p>
                 <div class="song-tags">#${tags.replace(/, /g, ' #')}</div>
             </div>
             <button class="play-track-btn" aria-label="Odtwórz ${song.title}">▶</button>
         `;
 
-        // Dodajemy obsługę kliknięcia w przycisk "Play"
+        
         const playBtn = card.querySelector('.play-track-btn');
         playBtn.addEventListener('click', () => {
             AudioPlayer.playTrack(song);
@@ -84,6 +74,12 @@ function renderSongs(songs) {
     });
 }
 
+
+searchInput.addEventListener('input', () => fetchSongs());
+genreSelect.addEventListener('change', () => fetchSongs());
+
+
+fetchSongs();
 // Event Listenery - odpalamy wyszukiwanie, gdy użytkownik pisze lub zmienia gatunek
 searchInput.addEventListener('input', () => fetchSongs());
 genreSelect.addEventListener('change', () => fetchSongs());
