@@ -20,6 +20,11 @@
                 <option value="lo-fi">Lo-Fi</option>
                 <option value="electronic">Elektroniczna</option>
                 <option value="ambient">Ambient</option>
+                <option value="chill">Chill</option>
+                <option value="pop">pop</option>
+                <option value="metal">Metal</option>
+                <option value="rock">Rock</option>
+                <option value="indie-rock">Indie-Rock</option>
             </select>
         </section>
 
@@ -29,15 +34,23 @@
     </main>
 
     <footer class="player-bar" id="playerBar">
-        <div class="player-info">
-            <strong id="trackTitle">Wybierz utwór</strong>
-            <span id="trackAuthor">--</span>
-        </div>
-        <div class="player-controls">
+       <div class="player-controls">
             <button id="playPauseBtn" class="play-btn" aria-label="Graj / Pauzuj" disabled>▶</button>
             <input type="range" id="progressBar" value="0" min="0" max="100" aria-label="Pasek postępu">
+            
+            <div class="volume-control">
+                <button id="muteBtn" class="mute-btn" aria-label="Wycisz/Odcisz">🔊</button>
+                <input type="range" id="volumeBar" value="100" min="0" max="100" aria-label="Głośność">
+            </div>
+
+            <div class="player-info">
+            <img id="trackCover" src="https://placehold.co/50x50/222/666?text=🎵" alt="Okładka" class="player-cover">
+            <div class="player-text">
+                <strong id="trackTitle">Wybierz utwór</strong>
+                <span id="trackAuthor">--</span>
+            </div>
         </div>
-    </footer>
+        </div>
 
     <script type="module" src="js/main.js"></script>
 </body>
