@@ -21,7 +21,7 @@ export const AudioPlayer = {
 
         // --- SEKCJA GŁOŚNOŚCI ---
         
-        // 1. Odczytujemy zapisaną głośność (lub ustawiamy 100%)
+        // 1. Odczytuje zapisaną głośność (lub ustawiam 100%)
         const savedVolume = localStorage.getItem('playerVolume') !== null 
             ? parseFloat(localStorage.getItem('playerVolume')) 
             : 1;
@@ -36,11 +36,11 @@ export const AudioPlayer = {
             this.audio.volume = newVolume;
             this.updateMuteIcon(newVolume);
             
-            // Zapisujemy w przeglądarce
+            // Zapisuje w przeglądarce
             localStorage.setItem('playerVolume', newVolume);
             
             if (newVolume > 0) {
-                this.lastVolume = newVolume; // Zapisujemy jako zapas do odciszania
+                this.lastVolume = newVolume; 
             }
         });
 
@@ -49,7 +49,6 @@ export const AudioPlayer = {
 
         // --- KONIEC SEKCJI GŁOŚNOŚCI ---
 
-        // (Tutaj zostaje reszta Twojego kodu z init: timeupdate, ended itp.)
         this.audio.addEventListener('timeupdate', () => {
             if (this.audio.duration) {
                 const percentage = (this.audio.currentTime / this.audio.duration) * 100;
@@ -87,7 +86,7 @@ export const AudioPlayer = {
         localStorage.setItem('playerVolume', this.audio.volume);
     },
 
-    // Nowa funkcja aktualizująca ikonkę
+  
     updateMuteIcon(vol) {
         if (vol === 0) {
             this.ui.muteBtn.innerText = '🔇';
@@ -98,7 +97,6 @@ export const AudioPlayer = {
         }
     },
 
-    // Zostawiasz playTrack() i togglePlay() bez zmian!
    playTrack(song) {
         if (this.currentSongUrl === song.file_url) {
             this.togglePlay();
