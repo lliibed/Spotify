@@ -2,12 +2,33 @@
   "songs": [
     {
       "id": "1",
-      "title": "Przykładowy Utwór CC0",
-      "author": "AudioDev",
-      "genre": ["lo-fi"],
-      "tags": ["chill", "coding"],
+      "title": "Can't Wait Till I Graduate",
+      "author": "Andrey Petrov",
+      "genre": ["pop"],
+      "tags": ["pop"],
+      "license": "CCBY",
+      "file_url": "https://raw.githubusercontent.com/lliibed/Spotify/main/audio/Andrey%20Petrov%20-%20Cant%20Wait%20Till%20I%20Graduate.mp3",
+      "cover_url": "https://m.media-amazon.com/images/I/71KulKot5OL._AC_UF894,1000_QL80_.jpg"
+    },
+    {
+      "id": "2",
+      "title": "Chill Music",
+      "author": "Free Music",
+      "genre": ["chill"],
+      "tags": ["chill", "relax"],
       "license": "CC0",
-      "file_url": "https://raw.githubusercontent.com/TWOJ_GITHUB/repo/main/audio/test.mp3"
+      "file_url": "https://raw.githubusercontent.com/lliibed/Spotify/main/audio/freemusicforvideo-chill-chill-music-504903.mp3",
+      "cover_url": "https://data.freetouse.com/music/tracks/eecb9480-d113-9306-c82f-53c571d6c517/cover/webp/md"
+    },
+   {
+      "id": "3",
+      "title": "On Axis",
+      "author": "Pipe Choir",
+      "genre": ["rock"],
+      "tags": ["atmospheric", "rock"],
+      "license": "CC0",
+      "file_url": "https://raw.githubusercontent.com/lliibed/Spotify/main/audio/Pipe%20Choir%20-%20On%20Axis.mp3",
+      "cover_url": "https://freemusicarchive.org/image/?file=images%2Falbums%2FPipe_Choir_-_Pipe_Choir_-_20160101172336025.jpg&width=290&height=290&type=album"
     }
   ]
 }
