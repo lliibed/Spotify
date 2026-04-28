@@ -1,14 +1,3 @@
-<?php
-// Ustawiamy nagłówek, żeby przeglądarka wiedziała, że to JSON
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // Przydatne podczas testów lokalnych
-
-// Czytamy plik JSON z dysku
-$jsonString = file_get_contents(__DIR__ . '/database/songs.json');
-
-// Zwracamy go dokładnie tak, jak jest
-echo $jsonString;
-?>
 
 <?php
 // Ustawiamy nagłówki - zwracamy JSON, pozwalamy na zapytania (CORS)
@@ -86,14 +75,6 @@ $totalResults = count($filteredSongs);
 $offset = ($page - 1) * $limit;
 $paginatedSongs = array_slice($filteredSongs, $offset, $limit);
 
-// 5. Zwracamy wynik do Frontendu
-echo json_encode([
-    'meta' => [
-        'total_results' => $totalResults,
-        'current_page'  => $page,
-        'limit'         => $limit,
-        'total_pages'   => ceil($totalResults / $limit)
-    ],
-    'results' => $paginatedSongs
-], JSON_UNESCAPED_UNICODE); // Flaga zapobiega krzakom przy polskich znakach
+// 5. Zwracamy czystą listę utworów do Frontendu (zgodnie z zaleceniami!)
+echo json_encode($paginatedSongs, JSON_UNESCAPED_UNICODE);
 ?>
