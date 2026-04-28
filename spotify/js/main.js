@@ -1,88 +1,114 @@
-// js/main.js
 import { AudioPlayer } from './player.js';
-
 
 AudioPlayer.init();
 
-
 const API_URL = 'api.php'; 
 
-// Elementy UI
 const searchInput = document.getElementById('searchInput');
 const genreSelect = document.getElementById('genreSelect');
 const songListContainer = document.getElementById('songList');
 
-// Główna funkcja pobierająca dane z PHP
 async function fetchSongs() {
-   
     const searchQuery = searchInput.value;
     const genre = genreSelect.value;
     
-   
     const url = new URL(API_URL, window.location.href);
     if (searchQuery) url.searchParams.append('search', searchQuery);
     if (genre) url.searchParams.append('genre', genre);
 
     try {
         const response = await fetch(url);
-        const data = await response.json();
+        // Pobieramy po prostu czystą tablicę z piosenkami (bez .results)
+        const data = await response.json(); 
         
-        if (data.results) {
-            renderSongs(data.results);
+        // Zabezpieczenie: sprawdzamy czy to na pewno jest lista (tablica)
+        if (Array.isArray(data)) {
+            renderSongs(data);
         } else {
-            songListContainer.innerHTML = '<p>Błąd pobierania danych z API.</p>';
+            renderError('Błąd pobierania danych z API.');
         }
     } catch (error) {
         console.error("Błąd połączenia:", error);
-        songListContainer.innerHTML = '<p>Brak połączenia z serwerem. Upewnij się, że serwer PHP działa.</p>';
+        renderError('Brak połączenia z serwerem. Upewnij się, że serwer PHP działa.');
     }
 }
 
+// Funkcja pomocnicza do błędów 
+function renderError(message) {
+    songListContainer.replaceChildren(); // Czyści listę bezpiecznie
+    const errorMsg = document.createElement('p');
+    errorMsg.textContent = message;
+    songListContainer.appendChild(errorMsg);
+}
 
 function renderSongs(songs) {
-    songListContainer.innerHTML = ''; 
+  
+    songListContainer.replaceChildren(); 
 
     if (songs.length === 0) {
-        songListContainer.innerHTML = '<p class="loading">Nie znaleziono utworów dla tego filtra.</p>';
+        const emptyMsg = document.createElement('p');
+        emptyMsg.className = 'loading';
+        emptyMsg.textContent = 'Nie znaleziono utworów dla tego filtra.';
+        songListContainer.appendChild(emptyMsg);
         return;
     }
 
     songs.forEach(song => {
-       
+        // 1. Tworzymy główną kartę
         const card = document.createElement('article');
         card.className = 'song-card';
-     
-        const tags = song.tags ? song.tags.join(', ') : '';
-
-      card.innerHTML = `
-            <img src="${song.cover_url || 'https://placehold.co/60x60/222/666?text=🎵'}" alt="Okładka" loading="lazy">
-            <div class="song-details">
-                <h3>${song.title}</h3>
-                <p>${song.author} | Licencja: ${song.license || 'CC0'}</p>
-                <div class="song-tags">#${tags.replace(/, /g, ' #')}</div>
-            </div>
-            <button class="play-track-btn" aria-label="Odtwórz ${song.title}">▶</button>
-        `;
-
         
-        const playBtn = card.querySelector('.play-track-btn');
+        // 2. Tworzymy obrazek
+        const img = document.createElement('img');
+        img.src = song.cover_url || 'https://placehold.co/60x60/222/666?text=🎵';
+        img.alt = 'Okładka';
+        img.loading = 'lazy';
+
+        // 3. Tworzymy kontener na teksty
+        const detailsDiv = document.createElement('div');
+        detailsDiv.className = 'song-details';
+
+        // 4. Tworzymy tytuł
+        const title = document.createElement('h3');
+        title.textContent = song.title; // textContent chroni przed XSS!
+
+        // 5. Tworzymy autora i licencję
+        const author = document.createElement('p');
+        author.textContent = `${song.author} | Licencja: ${song.license || 'CC0'}`;
+
+        // 6. Tworzymy tagi
+        const tagsDiv = document.createElement('div');
+        tagsDiv.className = 'song-tags';
+        const tags = song.tags ? song.tags.join(', ') : '';
+        tagsDiv.textContent = tags ? `#${tags.replace(/, /g, ' #')}` : '';
+
+        // Składamy teksty do kontenera details
+        detailsDiv.appendChild(title);
+        detailsDiv.appendChild(author);
+        detailsDiv.appendChild(tagsDiv);
+
+        // 7. Tworzymy przycisk Play
+        const playBtn = document.createElement('button');
+        playBtn.className = 'play-track-btn';
+        playBtn.setAttribute('aria-label', `Odtwórz ${song.title}`);
+        playBtn.textContent = '▶';
+        
         playBtn.addEventListener('click', () => {
             AudioPlayer.playTrack(song);
         });
+
+        // 8. Składamy wszystko w jedną kartę i dodajemy do głównej listy
+        card.appendChild(img);
+        card.appendChild(detailsDiv);
+        card.appendChild(playBtn);
 
         songListContainer.appendChild(card);
     });
 }
 
-
+// Event Listenery
 searchInput.addEventListener('input', () => fetchSongs());
 genreSelect.addEventListener('change', () => fetchSongs());
 
-
-fetchSongs();
-// Event Listenery - odpalamy wyszukiwanie, gdy użytkownik pisze lub zmienia gatunek
-searchInput.addEventListener('input', () => fetchSongs());
-genreSelect.addEventListener('change', () => fetchSongs());
-
-// Inicjalne załadowanie wszystkich utworów po wejściu na stronę
+// Inicjalne załadowanie
 fetchSongs();
