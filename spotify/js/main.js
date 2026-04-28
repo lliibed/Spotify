@@ -4,10 +4,12 @@ AudioPlayer.init();
 
 const API_URL = 'api.php'; 
 
+// 1. Elementy UI - muszą tu być, żeby renderSongs wiedziało gdzie rysować!
 const searchInput = document.getElementById('searchInput');
 const genreSelect = document.getElementById('genreSelect');
 const songListContainer = document.getElementById('songList');
 
+// 2. Funkcja pobierająca dane
 async function fetchSongs() {
     const searchQuery = searchInput.value;
     const genre = genreSelect.value;
@@ -18,97 +20,57 @@ async function fetchSongs() {
 
     try {
         const response = await fetch(url);
-        // Pobieramy po prostu czystą tablicę z piosenkami (bez .results)
-        const data = await response.json(); 
+        const data = await response.json();
         
-        // Zabezpieczenie: sprawdzamy czy to na pewno jest lista (tablica)
-        if (Array.isArray(data)) {
-            renderSongs(data);
-        } else {
-            renderError('Błąd pobierania danych z API.');
-        }
+        // Sprawdzamy czy PHP zwraca obiekt z .results czy czystą tablicę
+        const songs = data.results ? data.results : data;
+        renderSongs(songs);
+        
     } catch (error) {
         console.error("Błąd połączenia:", error);
-        renderError('Brak połączenia z serwerem. Upewnij się, że serwer PHP działa.');
+        songListContainer.innerHTML = '<p>Brak połączenia z serwerem.</p>';
     }
 }
 
-// Funkcja pomocnicza do błędów 
-function renderError(message) {
-    songListContainer.replaceChildren(); // Czyści listę bezpiecznie
-    const errorMsg = document.createElement('p');
-    errorMsg.textContent = message;
-    songListContainer.appendChild(errorMsg);
-}
-
+// 3. Twoja funkcja renderująca (DOKŁADNIE TA ZE ZDJĘCIA)
 function renderSongs(songs) {
-  
-    songListContainer.replaceChildren(); 
+    songListContainer.innerHTML = ''; 
 
     if (songs.length === 0) {
-        const emptyMsg = document.createElement('p');
-        emptyMsg.className = 'loading';
-        emptyMsg.textContent = 'Nie znaleziono utworów dla tego filtra.';
-        songListContainer.appendChild(emptyMsg);
+        const p = document.createElement('p');
+        p.classList.add('loading');
+        p.textContent = 'Nie znaleziono utworów dla tego filtra.';
+        songListContainer.appendChild(p);
         return;
     }
 
     songs.forEach(song => {
-        // 1. Tworzymy główną kartę
         const card = document.createElement('article');
         card.className = 'song-card';
         
-        // 2. Tworzymy obrazek
-        const img = document.createElement('img');
-        img.src = song.cover_url || 'https://placehold.co/60x60/222/666?text=🎵';
-        img.alt = 'Okładka';
-        img.loading = 'lazy';
-
-        // 3. Tworzymy kontener na teksty
-        const detailsDiv = document.createElement('div');
-        detailsDiv.className = 'song-details';
-
-        // 4. Tworzymy tytuł
-        const title = document.createElement('h3');
-        title.textContent = song.title; // textContent chroni przed XSS!
-
-        // 5. Tworzymy autora i licencję
-        const author = document.createElement('p');
-        author.textContent = `${song.author} | Licencja: ${song.license || 'CC0'}`;
-
-        // 6. Tworzymy tagi
-        const tagsDiv = document.createElement('div');
-        tagsDiv.className = 'song-tags';
         const tags = song.tags ? song.tags.join(', ') : '';
-        tagsDiv.textContent = tags ? `#${tags.replace(/, /g, ' #')}` : '';
 
-        // Składamy teksty do kontenera details
-        detailsDiv.appendChild(title);
-        detailsDiv.appendChild(author);
-        detailsDiv.appendChild(tagsDiv);
+        card.innerHTML = `
+            <img src="${song.cover_url || 'https://placehold.co/60x60/222/666?text=🎵'}" alt="Okładka" loading="lazy">
+            <div class="song-details">
+                <h3>${song.title}</h3>
+                <p>${song.author} | Licencja: ${song.license || 'CC0'}</p>
+                <div class="song-tags">#${tags.replace(/, /g, ' #')}</div>
+            </div>
+            <button class="play-track-btn" aria-label="Odtwórz ${song.title}">▶</button>
+        `;
 
-        // 7. Tworzymy przycisk Play
-        const playBtn = document.createElement('button');
-        playBtn.className = 'play-track-btn';
-        playBtn.setAttribute('aria-label', `Odtwórz ${song.title}`);
-        playBtn.textContent = '▶';
-        
+        const playBtn = card.querySelector('.play-track-btn');
         playBtn.addEventListener('click', () => {
             AudioPlayer.playTrack(song);
         });
-
-        // 8. Składamy wszystko w jedną kartę i dodajemy do głównej listy
-        card.appendChild(img);
-        card.appendChild(detailsDiv);
-        card.appendChild(playBtn);
 
         songListContainer.appendChild(card);
     });
 }
 
-// Event Listenery
+// 4. Startujemy nasłuchiwanie i pierwsze ładowanie
 searchInput.addEventListener('input', () => fetchSongs());
 genreSelect.addEventListener('change', () => fetchSongs());
 
-// Inicjalne załadowanie
 fetchSongs();
